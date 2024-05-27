@@ -1,0 +1,52 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
+import Config from 'react-native-config';
+
+async function tryLogin(navigation: any)
+{
+    const login = await AsyncStorage.getItem('market.credentials.login');
+    const password = await AsyncStorage.getItem('market.credentials.password');
+    if(login != null && password != null)
+    {
+        try
+        {
+            const result = await fetch(Config.API + '/user/login',
+            {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ login: login, password: password })
+            });
+            if(result.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: (await result.json()).key});
+            else navigation.navigate('LoginScreen');
+        }
+        catch
+        {
+            navigation.navigate('LoginScreen');
+        }
+        
+    }
+    else
+    {
+        navigation.navigate('LoginScreen');
+    }
+}
+
+function StartScreen({navigation}: {navigation: any}) : React.JSX.Element
+{
+    useEffect(() => {tryLogin(navigation)}, []);
+    return (
+        <View style={styles.container}>
+            <Image source={require('../img/icon.png')}/>
+        </View>
+    );
+}
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+});
+export default StartScreen;
