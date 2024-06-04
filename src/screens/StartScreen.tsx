@@ -11,13 +11,14 @@ async function tryLogin(navigation: any)
     {
         try
         {
-            const result = await fetch(Config.API + '/user/login',
+            const response = await fetch(Config.API + '/user/login',
             {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: login, password: password })
             });
-            if(result.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: (await result.json()).key});
+            const result = (await response.json());
+            if(response.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: result.access_token});
             else navigation.navigate('LoginScreen');
         }
         catch

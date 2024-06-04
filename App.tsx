@@ -2,9 +2,12 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+import Config from 'react-native-config';
+
 import StartScreen from './src/screens/StartScreen';
 import LoginScreen from './src/screens/LoginScreen';
-import Config from 'react-native-config';
+import MainScreen from './src/screens/MainScreen';
+import ExceptionScreen from './src/screens/ExceptionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +17,8 @@ function App(): React.JSX.Element {
       <Stack.Navigator>
         <Stack.Screen name='StartScreen' component={StartScreen} options={{headerShown: false}}/>
         <Stack.Screen name='LoginScreen' component={LoginScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='MainScreen' component={MainScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='ExceptionScreen' component={ExceptionScreen} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,21 +5,25 @@ import Config from "react-native-config";
 
 async function tryLogin(navigation: any, login: string, password: string)
 {
-    console.log(login, password);
-    console.log(Config.API + '/user/login');
     if(login != '' && password != '')
     {
-        await AsyncStorage.setItem('market.credentials.login', login);
-        await AsyncStorage.setItem('market.credentials.password', password);
-        const result = await fetch(Config.API + '/user/login',
+        try
         {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify({ login: login, password: password })
-        });
-        console.log(await result.json());
-        if(result.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: (await result.json()).key});
-        //else navigation.navigate('LoginScreen');
+            await AsyncStorage.setItem('market.credentials.login', login);
+            await AsyncStorage.setItem('market.credentials.password', password);
+            const result = await fetch(Config.API + '/user/login',
+            {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ login: login, password: password })
+            });
+            if(result.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: (await result.json()).key});
+            else navigation.navigate('ExceptionScreen');
+        }
+        catch
+        {
+            navigation.navigate('ExceptionScreen')
+        }
     }
 }
 
