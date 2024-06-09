@@ -4,7 +4,7 @@ function ExceptionScreen({navigation}: {navigation: any}) : React.JSX.Element
 {
     return(
         <View style={styles.container}>
-            <Text style={styles.textView}>Мы где-то накосячили, но очень скоро обязательно исправимся!</Text>
+            <Text style={styles.textView}>Что-то пошло не так, но мы обязательно исправим это!</Text>
         </View>
     );
 }

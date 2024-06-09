@@ -1,46 +1,34 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Config from "react-native-config";
-import { NavParamList } from "../types/NavProps";
 
-type Props = NativeStackScreenProps<NavParamList, 'LoginScreen'>;
-
-async function tryLogin(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>)
+async function tryRegister(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>)
 {
     if(login != '' && password != '')
     {
         setStatus('');
         try
         {
-            await AsyncStorage.setItem('market.credentials.login', login);
-            await AsyncStorage.setItem('market.credentials.password', password);
-            const result = await fetch(Config.API + '/user/login',
+            const result = await fetch(Config.API + '/user/register',
             {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: login, password: password })
             });
-            if(result.ok === true) {navigation.replace('MainScreen', {login: login, password: password, jwtKey: (await result.json()).access_token});}
-            else if(result.status == 403) {setStatus('Неверные данные!');}
-            else {navigation.navigate('ExceptionScreen');}
+            if(result.ok === true) {navigation.replace('LoginScreen', {loginText: login});}
         }
         catch
         {
             navigation.navigate('ExceptionScreen')
         }
     }
-    else setStatus('Введите логин и пароль!')
 }
 
-function LoginScreen({ route, navigation }: Props) : React.JSX.Element
+function RegistrationScreen ({navigation}: {navigation: any}) : React.JSX.Element
 {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [status, setStatus] = useState('');
-    const {loginText} = route.params;
-    useEffect(() => {setLogin(loginText)}, []);
     return(
         <View style={styles.container}>
             <View style={styles.inputView}>
@@ -49,7 +37,6 @@ function LoginScreen({ route, navigation }: Props) : React.JSX.Element
                 placeholder='Логин'
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
-                value={login}
                 /> 
             </View>
             <View style={styles.inputView}>
@@ -61,11 +48,11 @@ function LoginScreen({ route, navigation }: Props) : React.JSX.Element
                 onChangeText={(password: string) => setPassword(password)}
                 /> 
             </View>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {tryLogin(navigation, login, password, setStatus)}}>
-                <Text style={styles.buttonText}>Вход</Text>
+            <TouchableOpacity style={styles.buttonView} onPress={() => {tryRegister(navigation, login, password, setStatus)}}>
+                <Text style={styles.buttonText}>Зарегистрироваться</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.replace('RegistrationScreen')}}>
-                <Text style={styles.buttonText}>Регистрация</Text>
+            <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.replace('LoginScreen', {loginText: ''})}}>
+                <Text style={styles.buttonText}>Назад</Text>
             </TouchableOpacity>
             <Text style={styles.textView}>{status}</Text>
         </View>
@@ -120,4 +107,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default RegistrationScreen;

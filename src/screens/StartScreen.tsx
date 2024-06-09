@@ -18,18 +18,18 @@ async function tryLogin(navigation: any)
                 body: JSON.stringify({ login: login, password: password })
             });
             const result = (await response.json());
-            if(response.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwt: result.access_token});
-            else navigation.navigate('LoginScreen');
+            if(response.ok === true) navigation.navigate('MainScreen', {login: login, password: password, jwtKey: result.access_token});
+            else navigation.replace('LoginScreen', {loginText: ''});
         }
         catch
         {
-            navigation.navigate('LoginScreen');
+            navigation.replace('LoginScreen');
         }
         
     }
     else
     {
-        navigation.navigate('LoginScreen');
+        navigation.replace('LoginScreen');
     }
 }
 
