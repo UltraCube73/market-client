@@ -9,13 +9,13 @@ async function tryRegister(navigation: any, login: string, password: string, set
         setStatus('');
         try
         {
-            const result = await fetch(Config.API + '/user/register',
+            const response = await fetch(Config.API + '/user/register',
             {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: login, password: password })
             });
-            if(result.ok === true) {navigation.replace('LoginScreen', {loginText: login});}
+            if(response.ok === true) {navigation.replace('LoginScreen', {loginText: login});}
         }
         catch
         {

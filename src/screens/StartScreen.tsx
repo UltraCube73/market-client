@@ -23,13 +23,13 @@ async function tryLogin(navigation: any)
         }
         catch
         {
-            navigation.replace('LoginScreen');
+            navigation.replace('LoginScreen', {loginText: ''});
         }
         
     }
     else
     {
-        navigation.replace('LoginScreen');
+        navigation.replace('LoginScreen', {loginText: ''});
     }
 }
 

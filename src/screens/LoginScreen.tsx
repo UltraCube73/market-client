@@ -16,14 +16,15 @@ async function tryLogin(navigation: any, login: string, password: string, setSta
         {
             await AsyncStorage.setItem('market.credentials.login', login);
             await AsyncStorage.setItem('market.credentials.password', password);
-            const result = await fetch(Config.API + '/user/login',
+            const response = await fetch(Config.API + '/user/login',
             {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login: login, password: password })
             });
-            if(result.ok === true) {navigation.replace('MainScreen', {login: login, password: password, jwtKey: (await result.json()).access_token});}
-            else if(result.status == 403) {setStatus('Неверные данные!');}
+            const result = (await response.json());
+            if(response.ok === true) {navigation.replace('MainScreen', {login: login, password: password, jwtKey: result.access_token});}
+            else if(response.status == 403) {setStatus('Неверные данные!');}
             else {navigation.navigate('ExceptionScreen');}
         }
         catch
