@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, View } from "react-native";
 import { NavParamList } from '../types/NavProps';
 import Config from 'react-native-config';
+import { InstalledApps } from 'react-native-launcher-kit';
 
 type Props = NativeStackScreenProps<NavParamList, 'MainScreen'>;
 
@@ -24,7 +25,7 @@ function MainScreen({ route, navigation }: Props) : React.JSX.Element
     useEffect(() => {getData(setApps, jwtKey)});
     return(
         <View>
-            <FlatList data={apps} renderItem={({item}) => {}}/>
+            <FlatList data={apps} renderItem={({item}) => {return(<View></View>)}}/>
         </View>
     );
 }
