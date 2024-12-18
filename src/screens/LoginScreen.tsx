@@ -32,7 +32,7 @@ async function tryLogin(navigation: any, login: string, password: string, setSta
             navigation.navigate('ExceptionScreen')
         }
     }
-    else setStatus('Введите логин и пароль!')
+    else setStatus('Введите почту и пароль!')
 }
 
 function LoginScreen({ route, navigation }: Props) : React.JSX.Element
@@ -47,7 +47,7 @@ function LoginScreen({ route, navigation }: Props) : React.JSX.Element
             <View style={styles.inputView}>
                 <TextInput
                 style={styles.textInput}
-                placeholder='Логин'
+                placeholder='E-mail'
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
                 value={login}
