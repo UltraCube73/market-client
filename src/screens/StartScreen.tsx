@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import Config from 'react-native-config';
+import * as EmailValidator from 'email-validator';
 
 async function tryLogin(navigation: any)
 {
     const login = await AsyncStorage.getItem('market.credentials.login');
     const password = await AsyncStorage.getItem('market.credentials.password');
-    if(login != null && password != null)
+    if(login != null && password != null && EmailValidator.validate(login))
     {
         try
         {

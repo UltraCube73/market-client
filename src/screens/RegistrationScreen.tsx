@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Config from "react-native-config";
+import * as EmailValidator from 'email-validator';
 
 async function tryRegister(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>)
 {
@@ -9,6 +10,11 @@ async function tryRegister(navigation: any, login: string, password: string, set
         setStatus('');
         try
         {
+            if(!EmailValidator.validate(login))
+            {
+                setStatus('Почта указана неверно!');
+                return;
+            }
             const response = await fetch(Config.API + '/user/register',
             {
                 method: 'POST',
@@ -34,9 +40,10 @@ function RegistrationScreen ({navigation}: {navigation: any}) : React.JSX.Elemen
             <View style={styles.inputView}>
                 <TextInput
                 style={styles.textInput}
-                placeholder='Логин'
+                placeholder='E-mail'
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
+                inputMode="email"
                 /> 
             </View>
             <View style={styles.inputView}>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Config from "react-native-config";
 import { NavParamList } from "../types/NavProps";
+import * as EmailValidator from 'email-validator';
 
 type Props = NativeStackScreenProps<NavParamList, 'LoginScreen'>;
 
@@ -14,6 +15,11 @@ async function tryLogin(navigation: any, login: string, password: string, setSta
         setStatus('');
         try
         {
+            if(!EmailValidator.validate(login))
+            {
+                setStatus('Почта указана неверно!');
+                return;
+            }
             await AsyncStorage.setItem('market.credentials.login', login);
             await AsyncStorage.setItem('market.credentials.password', password);
             const response = await fetch(Config.API + '/user/login',
@@ -23,16 +29,16 @@ async function tryLogin(navigation: any, login: string, password: string, setSta
                 body: JSON.stringify({ login: login, password: password })
             });
             const result = (await response.json());
-            if(response.ok === true) {navigation.replace('MainScreen', {login: login, password: password, jwtKey: result.access_token});}
+            if(response.ok === true) navigation.replace('MainScreen', {login: login, password: password, jwtKey: result.access_token});
             else if(response.status == 403) {setStatus('Неверные данные!');}
-            else {navigation.navigate('ExceptionScreen');}
+            else navigation.navigate('ExceptionScreen');
         }
         catch
         {
-            navigation.navigate('ExceptionScreen')
+            navigation.navigate('ExceptionScreen');
         }
     }
-    else setStatus('Введите почту и пароль!')
+    else setStatus('Введите почту и пароль!');
 }
 
 function LoginScreen({ route, navigation }: Props) : React.JSX.Element
@@ -51,6 +57,7 @@ function LoginScreen({ route, navigation }: Props) : React.JSX.Element
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
                 value={login}
+                inputMode="email"
                 /> 
             </View>
             <View style={styles.inputView}>
