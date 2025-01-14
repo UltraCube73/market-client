@@ -32,9 +32,9 @@ async function tryRegister(navigation: any, login: string, password: string, set
 
 function RegistrationScreen ({navigation}: {navigation: any}) : React.JSX.Element
 {
-    const [login, setLogin] = useState('');
-    const [password, setPassword] = useState('');
-    const [status, setStatus] = useState('');
+    const [ login, setLogin ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ status, setStatus ] = useState('');
     return(
         <View style={styles.container}>
             <View style={styles.inputView}>
@@ -43,7 +43,7 @@ function RegistrationScreen ({navigation}: {navigation: any}) : React.JSX.Elemen
                 placeholder='E-mail'
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
-                inputMode="email"
+                inputMode='email'
                 /> 
             </View>
             <View style={styles.inputView}>

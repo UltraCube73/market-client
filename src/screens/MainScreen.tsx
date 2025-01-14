@@ -21,15 +21,15 @@ async function getData(setValue: React.Dispatch<React.SetStateAction<any>>, jwtK
 
 function MainScreen({ route, navigation }: Props) : React.JSX.Element
 {
-    const { login, password, jwtKey } = route.params;
+    const { login, jwtKey } = route.params;
     const [apps, setApps] = useState<any[]>([]);
     useEffect(() => {getData(setApps, jwtKey)}, []);
     return(
         <View style={styles.container}>
-            <FlatList style={styles.container} data={apps} renderItem={({item}) => { console.log(Config.API + '/files/apps/' + item.packageName + '/icon.png'); return(
+            <FlatList style={styles.container} data={apps} renderItem={({item}) => { console.log(Config.API + '/apps/' + item.packageName + '/icon'); return(
                 <View style={styles.itemContainer}>
-                <Image height={70} width={70} source={{uri: Config.API + '/files/apps/' + item.packageName + '/icon.png'}}/>
-                <Text style={styles.textView}>{item.name}</Text>
+                <Image height={70} width={70} source={{uri: Config.API + '/apps/' + item.packageName + '/icon'}}/>
+                <Text style={styles.textView} onPress={() => {navigation.replace('ApplicationScreen', {login: login, jwtKey: jwtKey, application: item})}}>{item.name}</Text>
             </View>)}}/>
         </View>
     );

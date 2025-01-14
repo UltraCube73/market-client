@@ -1,11 +1,1 @@
-{
-    "configurations": [
-        {
-            "name": "Debug Android - Experimental",
-            "request": "launch",
-            "type": "reactnative",
-            "cwd": "${workspaceFolder}",
-            "platform": "android"
-        }
-    ]
-}
+{}

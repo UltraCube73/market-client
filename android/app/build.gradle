@@ -120,7 +120,7 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 apply from: project(':react-native-config').projectDir.getPath() + '/dotenv.gradle'
 
 project.ext.envConfigFiles = [
-        development: '.env',
+        development: '.env.dev',
         staging :'.env',
         production:'.env'
 ]

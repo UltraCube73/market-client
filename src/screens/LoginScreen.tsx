@@ -29,7 +29,7 @@ async function tryLogin(navigation: any, login: string, password: string, setSta
                 body: JSON.stringify({ login: login, password: password })
             });
             const result = (await response.json());
-            if(response.ok === true) navigation.replace('MainScreen', {login: login, password: password, jwtKey: result.access_token});
+            if(response.ok === true) navigation.replace('MainScreen', {login: login, jwtKey: result.access_token});
             else if(response.status == 403) {setStatus('Неверные данные!');}
             else navigation.navigate('ExceptionScreen');
         }
@@ -57,7 +57,7 @@ function LoginScreen({ route, navigation }: Props) : React.JSX.Element
                 placeholderTextColor='gray'
                 onChangeText={(login: string) => setLogin(login)}
                 value={login}
-                inputMode="email"
+                inputMode='email'
                 /> 
             </View>
             <View style={styles.inputView}>
