@@ -4,28 +4,29 @@ export type UserItem =
     login: string
 };
 
-export type ReviewItem = 
-{
-    id: string,
-    author: UserItem,
-    content: string,
-    date: Date
-};
-
 export type ReleaseItem = 
 {
     id: string,
     name: string,
-    date: Date
+    releaseDate: Date
+};
+
+export type Category = 
+{
+    id: string,
+    name: string
 };
 
 export type MobileAppItem =
 {
     id: string,
-    authorId: string,
+    developer: string,
+    category: Category,
     name: string,
+    packageName: string,
     description: string,
-    downloads: string,
-    reviews: ReviewItem[],
-    releases: ReleaseItem[]
+    versions: ReleaseItem[],
+    latest: string,
+    rate: boolean,
+    downloads: number
 };

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { NavParamList } from '../types/NavProps';
 import Config from 'react-native-config';
-import { InstalledApps } from 'react-native-launcher-kit';
 
 type Props = NativeStackScreenProps<NavParamList, 'MainScreen'>;
 

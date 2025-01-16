@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@dominicvonk/react-native-apk-installer": "^2.2.2",
+    "@dr.pogodin/react-native-fs": "^2.30.3",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
@@ -17,7 +19,7 @@
     "email-validator": "^2.0.4",
     "https": "^1.0.0",
     "react": "18.2.0",
-    "react-native": "0.74.1",
+    "react-native": "0.75.3",
     "react-native-config": "^1.5.1",
     "react-native-launcher-kit": "^1.0.4",
     "react-native-navigation-bar-color": "^2.0.2",
