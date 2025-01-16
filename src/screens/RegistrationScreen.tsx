@@ -3,62 +3,56 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import Config from "react-native-config";
 import * as EmailValidator from 'email-validator';
 
-async function tryRegister(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>)
-{
-    if(login != '' && password != '')
-    {
+async function tryRegister(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>) {
+    if (login != '' && password != '') {
         setStatus('');
-        try
-        {
-            if(!EmailValidator.validate(login))
-            {
+        try {
+            if (!EmailValidator.validate(login)) {
                 setStatus('Почта указана неверно!');
                 return;
             }
             const response = await fetch(Config.API + '/user/register',
-            {
-                method: 'POST',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: JSON.stringify({ login: login, password: password })
-            });
-            if(response.ok === true) {navigation.replace('LoginScreen', {loginText: login});}
+                {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login: login, password: password })
+                });
+            if (response.ok === true) { navigation.replace('EmailVerificationScreen', { login: login, password: password }); }
         }
-        catch
-        {
+        catch {
             navigation.navigate('ExceptionScreen')
         }
     }
 }
 
-function RegistrationScreen ({navigation}: {navigation: any}) : React.JSX.Element
-{
-    const [ login, setLogin ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ status, setStatus ] = useState('');
-    return(
+function RegistrationScreen({ navigation }: { navigation: any }): React.JSX.Element {
+    const [login, setLogin] = useState('');
+    const [password, setPassword] = useState('');
+    const [status, setStatus] = useState('');
+    return (
         <View style={styles.container}>
             <View style={styles.inputView}>
                 <TextInput
-                style={styles.textInput}
-                placeholder='E-mail'
-                placeholderTextColor='gray'
-                onChangeText={(login: string) => setLogin(login)}
-                inputMode='email'
-                /> 
+                    style={styles.textInput}
+                    placeholder='E-mail'
+                    placeholderTextColor='gray'
+                    onChangeText={(login: string) => setLogin(login)}
+                    inputMode='email'
+                />
             </View>
             <View style={styles.inputView}>
                 <TextInput
-                style={styles.textInput}
-                placeholder='Пароль'
-                placeholderTextColor='gray'
-                secureTextEntry={true}
-                onChangeText={(password: string) => setPassword(password)}
-                /> 
+                    style={styles.textInput}
+                    placeholder='Пароль'
+                    placeholderTextColor='gray'
+                    secureTextEntry={true}
+                    onChangeText={(password: string) => setPassword(password)}
+                />
             </View>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {tryRegister(navigation, login, password, setStatus)}}>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { tryRegister(navigation, login, password, setStatus) }}>
                 <Text style={styles.buttonText}>Зарегистрироваться</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.replace('LoginScreen', {loginText: ''})}}>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { navigation.replace('LoginScreen') }}>
                 <Text style={styles.buttonText}>Назад</Text>
             </TouchableOpacity>
             <Text style={styles.textView}>{status}</Text>

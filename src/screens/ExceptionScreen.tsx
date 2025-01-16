@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-function ExceptionScreen({navigation}: {navigation: any}) : React.JSX.Element
-{
-    return(
+function ExceptionScreen({ navigation }: { navigation: any }): React.JSX.Element {
+    return (
         <View style={styles.container}>
-            <Text style={styles.textView}>Что-то пошло не так, но мы обязательно исправим это!</Text>
+            <Text style={styles.textView}>Нет соединения, проверьте работу сети или подождите некоторое время.</Text>
         </View>
     );
 }

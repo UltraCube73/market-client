@@ -8,71 +8,64 @@ import * as EmailValidator from 'email-validator';
 
 type Props = NativeStackScreenProps<NavParamList, 'LoginScreen'>;
 
-async function tryLogin(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>)
-{
-    if(login != '' && password != '')
-    {
+async function tryLogin(navigation: any, login: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>) {
+    if (login != '' && password != '') {
         setStatus('');
-        try
-        {
-            if(!EmailValidator.validate(login))
-            {
+        try {
+            if (!EmailValidator.validate(login)) {
                 setStatus('Почта указана неверно!');
                 return;
             }
             await AsyncStorage.setItem('market.credentials.login', login);
             await AsyncStorage.setItem('market.credentials.password', password);
             const response = await fetch(Config.API + '/user/login',
-            {
-                method: 'POST',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: JSON.stringify({ login: login, password: password })
-            });
+                {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login: login, password: password })
+                });
             const result = (await response.json());
-            if(response.ok === true) navigation.replace('MainScreen', {login: login, jwtKey: result.access_token});
-            else if(response.status == 403) {setStatus('Неверные данные!');}
+            if (response.ok === true) navigation.replace('MainScreen', { login: login, jwtKey: result.access_token });
+            else if (response.status == 403) { setStatus('Неверные данные!'); }
+            else if (response.status == 401) { navigation.replace('EmailVerificationScreen', { login: login, password: password }) }
             else navigation.navigate('ExceptionScreen');
         }
-        catch
-        {
+        catch {
             navigation.navigate('ExceptionScreen');
         }
     }
     else setStatus('Введите почту и пароль!');
 }
 
-function LoginScreen({ route, navigation }: Props) : React.JSX.Element
-{
+function LoginScreen({ route, navigation }: Props): React.JSX.Element {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [status, setStatus] = useState('');
-    const {loginText} = route.params;
-    useEffect(() => {setLogin(loginText)}, []);
-    return(
+    return (
         <View style={styles.container}>
             <View style={styles.inputView}>
                 <TextInput
-                style={styles.textInput}
-                placeholder='E-mail'
-                placeholderTextColor='gray'
-                onChangeText={(login: string) => setLogin(login)}
-                value={login}
-                inputMode='email'
-                /> 
+                    style={styles.textInput}
+                    placeholder='E-mail'
+                    placeholderTextColor='gray'
+                    onChangeText={(login: string) => setLogin(login)}
+                    value={login}
+                    inputMode='email'
+                />
             </View>
             <View style={styles.inputView}>
                 <TextInput
-                style={styles.textInput}
-                placeholder='Пароль'
-                placeholderTextColor='gray'
-                secureTextEntry={true}
-                onChangeText={(password: string) => setPassword(password)}
-                /> 
+                    style={styles.textInput}
+                    placeholder='Пароль'
+                    placeholderTextColor='gray'
+                    secureTextEntry={true}
+                    onChangeText={(password: string) => setPassword(password)}
+                />
             </View>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {tryLogin(navigation, login, password, setStatus)}}>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { tryLogin(navigation, login, password, setStatus) }}>
                 <Text style={styles.buttonText}>Вход</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.replace('RegistrationScreen')}}>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { navigation.replace('RegistrationScreen') }}>
                 <Text style={styles.buttonText}>Регистрация</Text>
             </TouchableOpacity>
             <Text style={styles.textView}>{status}</Text>

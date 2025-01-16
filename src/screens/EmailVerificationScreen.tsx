@@ -4,24 +4,59 @@ import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } 
 import { NavParamList } from '../types/NavProps';
 import Config from 'react-native-config';
 import { InstalledApps } from 'react-native-launcher-kit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<NavParamList, 'EmailVerificationScreen'>;
 
-function EmailVerificationScreen({ route, navigation }: Props) : React.JSX.Element
-{
-    const [ vcode, setVcode ] = useState('');
-    const { login, jwtKey } = route.params;
-    return(
+async function tryConfirm(navigation: any, login: string, code: string, password: string, setStatus: React.Dispatch<React.SetStateAction<string>>) {
+    setStatus('');
+    if (code.length == 6) {
+        try {
+            const response = await fetch(Config.API + '/user/confirm',
+                {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ login: login, code: code })
+                });
+            const result = (await response.json());
+            if (response.ok === true) {
+                await AsyncStorage.setItem('market.credentials.login', login);
+                await AsyncStorage.setItem('market.credentials.password', password);
+                navigation.replace('MainScreen', { login: login, jwtKey: result.access_token});
+            }
+            else if (response.status == 403) { setStatus('Неверный код!'); }
+        }
+        catch {
+            navigation.navigate('ExceptionScreen')
+        }
+    }
+    else setStatus('Длина кода - 6 символов');
+}
+
+function EmailVerificationScreen({ route, navigation }: Props): React.JSX.Element {
+    const [vcode, setVcode] = useState('');
+    const [status, setStatus] = useState('');
+    const { login, password } = route.params;
+    useEffect(() => { setStatus('Код подтверждения должен прийти на почту') }, [])
+    return (
         <View style={styles.container}>
             <View style={styles.inputView}>
                 <TextInput
-                style={styles.textInput}
-                placeholder='Код подтверждения'
-                placeholderTextColor='gray'
-                onChangeText={(vcode: string) => setVcode(vcode)}
+                    style={styles.textInput}
+                    placeholder='Код подтверждения'
+                    placeholderTextColor='gray'
+                    maxLength={6}
+                    inputMode='numeric'
+                    onChangeText={(vcode: string) => setVcode(vcode)}
                 />
             </View>
-            <TouchableOpacity style={styles.buttonView} onPress={() => {}}></TouchableOpacity>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { tryConfirm(navigation, login, vcode, password, setStatus) }}>
+                <Text style={styles.buttonText}>Проверить</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonView} onPress={() => { navigation.replace('RegistrationScreen') }}>
+                <Text style={styles.buttonText}>Назад</Text>
+            </TouchableOpacity>
+            <Text style={styles.textView}>{status}</Text>
         </View>
     );
 }

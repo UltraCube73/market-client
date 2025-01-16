@@ -6,11 +6,10 @@ import { NavParamList } from '../types/NavProps';
 
 type Props = NativeStackScreenProps<NavParamList, 'ApplicationScreen'>;
 
-function ApplicationScreen({ route, navigation }: Props) : React.JSX.Element
-{
+function ApplicationScreen({ route, navigation }: Props): React.JSX.Element {
     const { login, jwtKey, application } = route.params;
     //useEffect(() => {setLogin(loginText)}, []);
-    return(
+    return (
         <View></View>
     );
 }
