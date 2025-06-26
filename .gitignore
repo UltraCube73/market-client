@@ -84,3 +84,5 @@ devenv.local.nix
 
 #android
 .android
+
+.vscode/
